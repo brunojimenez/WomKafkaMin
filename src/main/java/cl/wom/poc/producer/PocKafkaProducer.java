@@ -1,5 +1,6 @@
 package cl.wom.poc.producer;
 
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -60,11 +61,11 @@ public class PocKafkaProducer {
 		props.put("delivery.timeout.ms", "120000");
 
 		try (Producer<String, String> producer = new KafkaProducer<String, String>(props)) {
-			for (var i = 0; i < 10; i++) {
+			for (var i = 0; i < 10000; i++) {
 				var key = String.valueOf(i);
-				var value = "AAD";
+				var value = new Date().toString();
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC, key, value);
-				producer.send(producerRecord);
+				producer .send(producerRecord);
 			}
 			producer.flush();
 		} catch (Exception e) {
