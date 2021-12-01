@@ -65,7 +65,13 @@ public class PocKafkaProducer {
 				var key = String.valueOf(i);
 				var value = new Date().toString();
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC, key, value);
-				producer .send(producerRecord);
+				producer.send(producerRecord, (metadata, exception) -> {
+					if (exception != null) {
+						log.error("Error = ", exception);
+					}
+					log.info("Partition = {}, Offset = {}, key = {}, value = {}", metadata.partition(),
+							metadata.offset(), key, value);
+				});
 			}
 			producer.flush();
 		} catch (Exception e) {
