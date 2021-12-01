@@ -1,7 +1,11 @@
 package cl.wom.poc.producer;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -23,47 +27,16 @@ public class PocKafkaProducer {
 
 		Properties props = new Properties();
 
-		// Kafka broker
-		// https://kafka.apache.org/documentation/#producerconfigs_bootstrap.servers
 		props.put("bootstrap.servers", SERVERS);
-
-		// Serialization
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-
-		// OPTIONAL - Acknowledge (string - default=all)
-		// 0 - No wait for any acknowledgement (no retries effect)
-		// 1 - Almost leader ack
-		// N - Almost N brokers with ack
-		// -1/all - All brokers with ack (in-sync)
-		// https://kafka.apache.org/documentation/#producerconfigs_acks
-		props.put("acks", "all");
-
-		// OPTIONAL - Buffer Memory (long, default=33554432)
-		// https://kafka.apache.org/documentation/#producerconfigs_buffer.memory
-		props.put("buffer.memory", "33554432");
-
-		// OPTIONAL - Retries (int, defaul=2147483647)
-		// https://kafka.apache.org/documentation/#producerconfigs_retries
-		props.put("retries", "2147483647");
-
-		// OPTIONAL - Batch Size (int - default=16384)
-		// https://kafka.apache.org/documentation/#producerconfigs_batch.size
-		props.put("batch.size", "16384");
-
-		// OPTIONAL - Linger (long - default=0)
-		// https://kafka.apache.org/documentation/#producerconfigs_linger.ms
-		props.put("linger.ms", "6");
-
-		// OPTIONAL - delivery.timeout.ms (int - default=120000 (2 minutes))
-		// delivery.timeout.ms >= linger.ms + request.timeout.ms
-		// https://kafka.apache.org/documentation/#producerconfigs_delivery.timeout.mss
-		props.put("delivery.timeout.ms", "120000");
 
 		try (Producer<String, String> producer = new KafkaProducer<String, String>(props)) {
 			for (var i = 0; i < 10000; i++) {
 				var key = String.valueOf(i);
-				var value = new Date().toString();
+				var value = new String(Files.readAllBytes(Paths.get("src/main/resources/message.txt")));
+				log.info("message: \n{}", value);
+
 				ProducerRecord<String, String> producerRecord = new ProducerRecord<>(TOPIC, key, value);
 				producer.send(producerRecord, (metadata, exception) -> {
 					if (exception != null) {

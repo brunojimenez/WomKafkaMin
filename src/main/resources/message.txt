@@ -1,0 +1,41 @@
+{
+	"messageType": "annulment",
+	"transactionID": "432234324234243",	
+	"communication": {},
+	"annulment": {		  
+		  "ticketNumber":  "163463918096274388"		  
+	}
+}
+
+{
+	"messageType": "communication",
+	"transactionID": "432234324234243",
+	"communication": {	
+            "date": ISODate("2020-03-16T05:32:22.353Z"),
+            "orderID": "432186",
+            "request": {
+            "type": "2",
+            "callbackFlag": true,
+            "content": "content",
+            "description": "description",
+            "logFlag": true,
+            "sendTime": "1986-01-02",
+            "sendTimeComplete": "1986-01-02",
+            "subject": "Error en rollback Payment 163463918096274388",
+            "tryTimes": 3,
+            "comunicationMessageCharacterCaracteristic": [{
+              "name": "Servicio",
+              "value": "SRV40229"
+            }],
+            "receiver": [{
+              "email": "receiver@email.com",
+              "name": "name",
+              "type": "to"
+            }],
+            "sender": [ {
+              "email": "noreply@wom.cl",
+              "name": "SRV40266 - Event Management",
+            }]	
+	},
+	"annulment": {}
+}
